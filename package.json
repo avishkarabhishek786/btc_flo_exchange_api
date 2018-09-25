@@ -1,0 +1,29 @@
+{
+  "name": "btc_flo_exchange_api",
+  "version": "1.0.0",
+  "description": "A Bitcoin-FLO exchange api.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avishkarabhishek786/btc_flo_exchange_api.git"
+  },
+  "keywords": [
+    "Bitcoin",
+    "FLO",
+    "API",
+    "NodeJS",
+    "Mongoose",
+    "C++",
+    "P2P",
+    "Exchange"
+  ],
+  "author": "Abhishek Sinha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avishkarabhishek786/btc_flo_exchange_api/issues"
+  },
+  "homepage": "https://github.com/avishkarabhishek786/btc_flo_exchange_api#readme"
+}
