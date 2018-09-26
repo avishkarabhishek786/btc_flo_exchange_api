@@ -1,18 +1,42 @@
-var conn = new WebSocket('ws://localhost:9090')
+var socket = io();
 
-conn.onopen = function () {
-    console.log("Connecting to signalling server.");
-} 
+socket.on('connect', function() {
+    console.log("Connected to server");
+})
 
-conn.onmessage = function(msg) {
+socket.on('message', function(msg) {
     console.log(msg);
-    send({client:"response from client"});
-}
 
-conn.onerror = function(error) {
-    console.error(error);
-}
+    try {
+        var data = JSON.parse(msg);
+    } catch(e) {
+        var data = msg;
+    }    
 
+    switch (data.type) {
+        case "foo":
+            console.log("foo");
+            break;
+
+        case "bar":
+            console.log('bar');
+            break;
+
+        default:
+            console.log('default');
+            break;
+    }
+})
+
+socket.on('error', function(err) {
+    console.error(err);
+})
+
+// alias for sending JSON encoded message
 function send(message) {
-    conn.send(JSON.stringify(message));
+    if (connectedUser) {
+        message.name = connectedUser;
+    }
+    //conn.send(JSON.stringify(message));
+    socket.emit('message', JSON.stringify(message));
 }
