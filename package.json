@@ -4,7 +4,8 @@
   "description": "A Bitcoin-FLO exchange api.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,14 @@
   "bugs": {
     "url": "https://github.com/avishkarabhishek786/btc_flo_exchange_api/issues"
   },
-  "homepage": "https://github.com/avishkarabhishek786/btc_flo_exchange_api#readme"
+  "homepage": "https://github.com/avishkarabhishek786/btc_flo_exchange_api#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "ws": "^6.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
 }
