@@ -8,6 +8,8 @@ const port = process.env.PORT || 7788
 
 const app = express()
 app.io = socketIO();
+app.io.set('origins', '*:*');
+
 const server = http.createServer(app);
 app.io.attach(server);
 

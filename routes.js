@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-let  sendTo = (socket, message) => {
+let sendTo = (socket, message) => {
     if (typeof socket !== undefined) {
         socket.emit("message", JSON.stringify(message));
         console.log(JSON.stringify(message));

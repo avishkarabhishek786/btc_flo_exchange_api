@@ -1,4 +1,10 @@
-var socket = io();
+//var socket = io();
+//var socket = io.connect('http://localhost:7788');
+let host = window.location.host;
+let port = window.location.port;
+//console.log(`${host}`);
+
+var socket = io.connect(`${host}`);
 
 socket.on('connect', function() {
     console.log("Connected to server");
