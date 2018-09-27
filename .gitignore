@@ -1,4 +1,5 @@
 .vscode/
+public/a.out
 # Logs
 logs
 *.log

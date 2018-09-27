@@ -2,18 +2,87 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>BTC FLO Exchange API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <style>
+        nav {
+            margin: 0 0 20px 0;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Hello World!</h2>
-    <script src="/socket.io/socket.io.js"></script>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">BTC FLO Exchange</a>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 card">
+
+                <div class="card-header bg-secondary mb-3">Trade BTC-FLO</div>
+
+                <div class="card-body">
+                    <div class="form-group">
+                    <label for="_pd">Enter Product: </label>
+                    <select class="custom-select form-control" id="_pd">
+                      <option selected>Choose..</option>
+                      <option value="BTC">Bitcoin</option>
+                      <option value="FLO">FLO</option>
+                      <option value="USD">US Dollars</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="_crcy">Enter Currency: </label>
+                    <select class="custom-select form-control" id="_crcy">
+                      <option selected>Choose..</option>
+                      <option value="BTC">Bitcoin</option>
+                      <option value="FLO">FLO</option>
+                      <option value="USD">US Dollars</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="_qty">Quantity: </label>
+                    <input type="text" class="form-control" id="_qty" placeholder=" For eg: 10">
+                </div>
+                <div class="form-group">
+                    <label for="_pr">Buying Price: </label>
+                    <input type="text" class="form-control" id="_pr" placeholder="Enter Price">
+                </div>
+                <div class="form-group">
+                    <label for="flo_pub_key">Your FLO Public Key: </label>
+                    <input type="text" class="form-control" id="flo_pub_key" placeholder="Enter FLO Public Key">
+                </div>
+                <div class="form-group">
+                    <label for="flo_sig">Enter your FLO Signature: </label>
+                    <input type="text" class="form-control" id="flo_sig" placeholder="Enter your FLO Signature">
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="_td" id="_td_by" value="buy">
+                  <label class="form-check-label" for="_td_by">Buy</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="_td" id="_td_sell" value="sell">
+                  <label class="form-check-label" for="_td_sell">Sell</label>
+                </div>
+
+                <button type="submit" id="btn_trade" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </div>      
+    </div>
+
+    <script src="http://localhost:7788/socket.io/socket.io.js"></script>
     <script>
-        var socket = io.connect(window.location.host);
+
+        var socket = io.connect(`http://localhost:7788`);
 
         socket.on('connect', function () {
             console.log("Connected to server");
@@ -29,7 +98,7 @@
             }
 
             switch (data.type) {
-                case "foo":
+                case "trade":
                     console.log("foo");
                     break;
 
@@ -38,6 +107,7 @@
                     break;
 
                 default:
+                    send(`{"client": "Hello Server!"}`);
                     console.log('default');
                     break;
             }
@@ -49,12 +119,49 @@
 
         // alias for sending JSON encoded message
         function send(message) {
-            if (connectedUser) {
-                message.name = connectedUser;
+            if (typeof socket !== undefined) {
+                socket.emit('message', JSON.stringify(message));
             }
-            //conn.send(JSON.stringify(message));
-            socket.emit('message', JSON.stringify(message));
         }
+    </script>
+
+    <!-- sha256 -->
+    <script src="http://geraintluff.github.io/sha256/sha256.min.js"></script>
+
+    <script>
+        var _pd = document.querySelector('#_pd'); 
+        var _crcy = document.querySelector('#_crcy'); 
+        var _qty = document.querySelector('#_qty'); 
+        var _pr = document.querySelector('#_pr'); 
+        var flo_pub_key = document.querySelector('#flo_pub_key'); 
+        var flo_sig = document.querySelector('#flo_sig'); 
+        var _td = document.querySelector('input[name="_td"]:checked') == null ? null : document.querySelector('input[name="_td"]:checked').value;  
+        var btn_trade = document.querySelector('#btn_trade'); 
+
+        btn_trade.onclick = function(e) {
+            e.preventDefault();
+
+            let trade_obj = {
+                    "product": _pd.value,
+                    "currency": _crcy.value,
+                    "quantity": _qty.value,
+                    "price": _pr.value,
+                    "flo_pub_key": flo_pub_key.value,
+                    "flo_sig": flo_sig.value,
+                    "trade_type": _td_by.value
+                }
+
+            let td_hash = sha256(JSON.stringify(trade_obj));
+
+            let trade_obj_hash = {
+                type: "trade",
+                data: trade_obj,
+                sha256: td_hash
+            }
+
+            send(trade_obj_hash);
+        }
+        
     </script>
 </body>
 
