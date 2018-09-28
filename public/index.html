@@ -79,10 +79,12 @@
         </div>      
     </div>
 
-    <script src="http://localhost:7788/socket.io/socket.io.js"></script>
+    <!-- <script src="http://localhost:7788/socket.io/socket.io.js"></script> -->
+    <script src="http://ranchimall.duckdns.org:7788/socket.io/socket.io.js"></script>
     <script>
 
-        var socket = io.connect(`http://localhost:7788`);
+        //var socket = io.connect(`http://localhost:7788`);
+        var socket = io.connect(`http://ranchimall.duckdns.org:7788`);
 
         socket.on('connect', function () {
             console.log("Connected to server");
