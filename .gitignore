@@ -1,4 +1,5 @@
 .vscode/
+a.out
 # Logs
 logs
 *.log
